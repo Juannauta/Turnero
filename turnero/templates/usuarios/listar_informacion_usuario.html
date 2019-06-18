@@ -9,7 +9,14 @@ disponible
 </form>
 {% else %}
 ocupado
-
-{{request.user.get_turno.0.usuario.pk}}
-{{request.user.get_turno.0.servicio.pk}}
+<br>
+<form action="." method="POST">
+        {% csrf_token %}
+    
+<p><label for="id_first_name">Nombre:</label> <input type="text" name="first_name" maxlength="30" id="id_first_name" value="{{turno.0.usuario.first_name}}"></p>
+<p><label for="id_last_name">Apellidos:</label> <input type="text" name="last_name" maxlength="150" id="id_last_name" value="{{turno.0.usuario.last_name}}"></p>
+<p><label for="id_cedula">Cedula:</label> <input type="text" name="cedula" maxlength="30" id="id_cedula" value="{{turno.0.usuario.cedula}}"></p>
+    <br>
+    <button>Enviar</button>
+</form>
 {% endif %}

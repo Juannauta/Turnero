@@ -16,7 +16,8 @@ from turnero.turnero_app.models import (
     )
 from turnero.usuarios.models import User
 
-class AcceptarServicio(View):
+
+class AcceptarServicio(LoginRequiredMixin,View):
     template_name = "index.html"
 
     def post(self, request, *args, **kwargs):
@@ -101,10 +102,24 @@ class UserLogoutView(View):
         logout(request)
         return HttpResponseRedirect(settings.LOGIN_URL)
 
-class ListarInformacionUsuario(LoginRequiredMixin,TemplateView):
+class ListarInformacionUsuario(LoginRequiredMixin,TemplateView,UpdateView):
     template_name = "usuarios/listar_informacion_usuario.html"
+    model = User
+    fields = ('first_name','last_name','cedula',)
 
+    def get_queryset(self):
+        if self.request.user.estado == 'DI':
+            self.pk = self.request.user.pk
+            return self.request.user
+        else:
+            self.pk = self.request.user.get_turno()[0].usuario.pk
+            return self.request.user.get_turno()[0].usuario
+
+    def get_object(self, queryset=None):
+        return self.get_queryset()
+        
     def get_context_data(self, **kwargs):
+        self.object = self.get_queryset()
         servicios = ServiciosUsuarios.objects.filter(finalizo=False).order_by('prioridad__numero')
         
         context = super().get_context_data(**kwargs)

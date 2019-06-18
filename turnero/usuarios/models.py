@@ -21,8 +21,5 @@ class User(AbstractUser):
     ]
     estado = models.CharField(max_length=2,choices=ESTADO,default=DISPONIBLE)
 
-    def get_absolute_url(self):
-        return reverse("users:detail", kwargs={"username": self.username})
-
     def get_turno(self):
         return self.usuario_turnos.all().filter(proceso=True)
