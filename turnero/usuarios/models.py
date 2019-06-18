@@ -12,8 +12,15 @@ class User(AbstractUser):
         (USUARIO, 'Usuario'),
         (EMPLEADO, 'Empleado'),
     ]
-    cedula = models.CharField(max_length=30,null=True,blank=True)
     tipo_usuario = models.CharField(max_length=2,choices=TIPOS_USUARIOS,default=USUARIO)
+    cedula = models.CharField(max_length=30,null=True,blank=True)
+    OCUPADO = 'OC'
+    DISPONIBLE = 'DI'
+    ESTADO = [
+        (OCUPADO, 'Ocupado'),
+        (DISPONIBLE, 'Disponible'),
+    ]
+    estado = models.CharField(max_length=2,choices=ESTADO,default=DISPONIBLE)
 
     def get_absolute_url(self):
         return reverse("users:detail", kwargs={"username": self.username})
