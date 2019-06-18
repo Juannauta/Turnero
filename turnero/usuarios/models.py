@@ -12,6 +12,7 @@ class User(AbstractUser):
         (USUARIO, 'Usuario'),
         (EMPLEADO, 'Empleado'),
     ]
+    cedula = models.CharField(max_length=30,null=True,blank=True)
     tipo_usuario = models.CharField(max_length=2,choices=TIPOS_USUARIOS,default=USUARIO)
 
     def get_absolute_url(self):

@@ -1,5 +1,7 @@
 from django.db import models
 
+from turnero.usuarios.models import User
+
 class Prioridad(models.Model):
     nombre = models.CharField(max_length=200)
     numero = models.IntegerField()
@@ -24,6 +26,8 @@ class Servicios(models.Model):
 class ServiciosUsuarios(models.Model):
     servicicios = models.ForeignKey(Servicios, on_delete=models.CASCADE)
     prioridad = models.ForeignKey(Prioridad, on_delete=models.CASCADE)
+    prioridad = models.ForeignKey(User, on_delete=models.CASCADE)
+    finalizo = models.BooleanField(default=False)
 
     class Meta:
         verbose_name_plural = "Servicios de usuarios"
