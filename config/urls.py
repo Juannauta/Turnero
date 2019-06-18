@@ -8,6 +8,7 @@ from django.views import defaults as default_views
 from turnero.usuarios.views import (
         UserLoginView, ListarInformacionUsuario, 
         IndexView, RegisterUser,
+        ListServices, 
     )
 
 urlpatterns = [
@@ -16,6 +17,7 @@ urlpatterns = [
     path('', IndexView.as_view(), name="index"),
     path('login/', UserLoginView.as_view(), name="login"),
     path('registro/', RegisterUser.as_view(), name="registro"),
+    path('listar/', ListServices.as_view(), name="listar"),
     path('info/', ListarInformacionUsuario.as_view(), name="info"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

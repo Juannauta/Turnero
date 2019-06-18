@@ -8,13 +8,23 @@ from django.http import HttpResponseRedirect
 from django.views.generic import (
         View, TemplateView, 
         UpdateView, CreateView,
+        ListView,
     )
 
 from turnero.turnero_app.models import ServiciosUsuarios
 from turnero.usuarios.models import User
 
+class AcceptarServicio(View):
+    def post(self, request, *args, **kwargs):
+        pass
+
 class IndexView(TemplateView):
     template_name = "index.html"
+
+class ListServices(ListView):
+    model = ServiciosUsuarios
+    queryset = ServiciosUsuarios.objects.filter(finalizo=False)
+
 
 class RegisterUser(CreateView):
     model = ServiciosUsuarios
