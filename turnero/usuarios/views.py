@@ -102,7 +102,7 @@ class UserLogoutView(View):
         logout(request)
         return HttpResponseRedirect(settings.LOGIN_URL)
 
-class ListarInformacionUsuario(LoginRequiredMixin,TemplateView,UpdateView):
+class ListarInformacionUsuario(LoginRequiredMixin,UpdateView):
     template_name = "usuarios/listar_informacion_usuario.html"
     model = User
     fields = ('first_name','last_name','cedula',)
@@ -117,7 +117,10 @@ class ListarInformacionUsuario(LoginRequiredMixin,TemplateView,UpdateView):
 
     def get_object(self, queryset=None):
         return self.get_queryset()
-        
+
+    def get_success_url(self):
+        return reverse('info')
+
     def get_context_data(self, **kwargs):
         self.object = self.get_queryset()
         servicios = ServiciosUsuarios.objects.filter(finalizo=False).order_by('prioridad__numero')
