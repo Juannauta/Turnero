@@ -3,7 +3,6 @@ from django.contrib.auth.models import AbstractUser
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
-
 class User(AbstractUser):
 
     USUARIO = 'US'
@@ -24,3 +23,6 @@ class User(AbstractUser):
 
     def get_absolute_url(self):
         return reverse("users:detail", kwargs={"username": self.username})
+
+    def get_turno(self):
+        return self.usuario_turnos.all().filter(proceso=True)

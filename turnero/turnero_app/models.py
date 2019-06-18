@@ -53,7 +53,7 @@ class ServiciosUsuarios(models.Model):
         return "{} {} {}".format(self.pk,self.servicicios,self.usuario)
 
 class TurnosEmpleados(models.Model):
-    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE,related_name='usuario_turnos')
     servicio = models.ForeignKey(ServiciosUsuarios, on_delete=models.CASCADE)
     proceso = models.BooleanField(default=True)
     fecha_creacion = models.DateTimeField(auto_now=True)

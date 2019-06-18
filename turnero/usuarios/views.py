@@ -11,12 +11,33 @@ from django.views.generic import (
         ListView,
     )
 
-from turnero.turnero_app.models import ServiciosUsuarios
+from turnero.turnero_app.models import (
+        ServiciosUsuarios,TurnosEmpleados,
+    )
 from turnero.usuarios.models import User
 
 class AcceptarServicio(View):
+    template_name = "index.html"
+
     def post(self, request, *args, **kwargs):
-        pass
+        try:
+            usuario = User.objects.get(pk=request.POST.get('usuario',''))
+        except:
+            return HttpResponseRedirect(reverse('info'))
+
+        try:
+            turno = ServiciosUsuarios.objects.get(pk=request.POST.get('turno',''))
+        except:
+            return HttpResponseRedirect(reverse('info'))
+
+        turnoEmpleado = TurnosEmpleados(
+            usuario=usuario,
+            servicio=turno,
+        )
+        turnoEmpleado.save()
+        request.user.estado = 'OC'
+        request.user.save()
+        return HttpResponseRedirect(reverse('info'))
 
 class IndexView(TemplateView):
     template_name = "index.html"
@@ -82,3 +103,12 @@ class UserLogoutView(View):
 
 class ListarInformacionUsuario(LoginRequiredMixin,TemplateView):
     template_name = "usuarios/listar_informacion_usuario.html"
+
+    def get_context_data(self, **kwargs):
+        servicios = ServiciosUsuarios.objects.filter(finalizo=False).order_by('prioridad__numero')
+        
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'turno':servicios,
+        })
+        return context
