@@ -57,7 +57,7 @@ DJANGO_APPS = [
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
-    "django.contrib.sites",
+    #"django.contrib.sites",
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # "django.contrib.humanize", # Handy template tags
@@ -69,11 +69,13 @@ THIRD_PARTY_APPS = [
 
 LOCAL_APPS = [
     "turnero.turnero_app",
+    "turnero.usuarios",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
-
+# https://docs.djangoproject.com/en/dev/ref/settings/#auth-user-model
+AUTH_USER_MODEL = "usuarios.User"
 # AUTHENTICATION
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#authentication-backends
@@ -201,7 +203,7 @@ EMAIL_BACKEND = env(
 # ADMIN
 # ------------------------------------------------------------------------------
 # Django Admin URL.
-ADMIN_URL = "adminitrador/"
+ADMIN_URL = "administrador/"
 # https://docs.djangoproject.com/en/dev/ref/settings/#admins
 ADMINS = [("""Juan Villa""", "juandavidvillaloaiza@gmail.com")]
 # https://docs.djangoproject.com/en/dev/ref/settings/#managers
