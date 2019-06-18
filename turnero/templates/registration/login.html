@@ -1,0 +1,25 @@
+{% load i18n %}
+{% block content %}
+	{% if form.errors and not form.non_field_errors %}
+		<p class="errornote">
+			{% if form.errors.items|length == 1 %}{% trans "Please correct the error below." %}{% else %}{% trans "Please correct the errors below." %}{% endif %}
+		</p>
+	{% endif %}
+
+	{% if form.non_field_errors %}
+		{% for error in form.non_field_errors %}
+			<p class="errornote">
+    			{{ error }}
+			</p>
+		{% endfor %}
+	{% endif %}
+	<form action="{% url 'login' %}" method="POST">
+		{% csrf_token %}
+		{{ form.username.errors }}
+		<label>{% trans "Usuario" %}<input type="text" name="username" value=""></label><br>
+
+		{{ form.password.errors }}
+		<label>{% trans "Contraseña" %}<input type="password" name="password" value=""></label><br>
+		<input type="submit" id="save_form" value="Enter">
+	</form>
+{% endblock %}

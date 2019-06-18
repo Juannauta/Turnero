@@ -5,10 +5,15 @@ from django.contrib import admin
 from django.views.generic import TemplateView
 from django.views import defaults as default_views
 
+from turnero.usuarios.views import (
+        UserLoginView, ListarInformacionUsuario,
+    )
+
 urlpatterns = [
     # Django Admin, use {% url 'admin:index' %}
     path(settings.ADMIN_URL, admin.site.urls),
-    # Your stuff: custom urls includes go here
+    path('', UserLoginView.as_view(), name="login"),
+    path('info/', ListarInformacionUsuario.as_view(), name="info"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
