@@ -32,7 +32,7 @@ class ServiciosEmpleado(models.Model):
         verbose_name = "Servicio de empleado"
 
     def __str__(self):
-        return "{} {} {}".format(self.pk,self.servicicios,self.prioridad)
+        return "{} {}".format(self.usuario,self.servicicios)
 
         
 class ServiciosUsuarios(models.Model):
@@ -48,4 +48,4 @@ class ServiciosUsuarios(models.Model):
         verbose_name = "Turnos de usuarios"
 
     def __str__(self):
-        return "{} {} {}".format(self.pk,self.servicicios,self.prioridad)
+        return "{} {} {}".format(self.pk,self.servicicios,self.usuario)
