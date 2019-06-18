@@ -5,6 +5,7 @@ from turnero.usuarios.models import User
 class Prioridad(models.Model):
     nombre = models.CharField(max_length=200)
     numero = models.IntegerField()
+    fecha_creacion = models.DateTimeField(auto_now=True)
 
     class Meta:
         verbose_name_plural = "Prioridades"
@@ -15,6 +16,7 @@ class Prioridad(models.Model):
 
 class Servicios(models.Model):
     nombre = models.CharField(max_length=200)
+    fecha_creacion = models.DateTimeField(auto_now=True)
 
     class Meta:
         verbose_name_plural = "Servicio"
@@ -26,6 +28,7 @@ class Servicios(models.Model):
 class ServiciosEmpleado(models.Model):
     servicicios = models.ForeignKey(Servicios, on_delete=models.CASCADE)
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    fecha_creacion = models.DateTimeField(auto_now=True)
 
     class Meta:
         verbose_name_plural = "Servicios de los empleados"
@@ -34,7 +37,6 @@ class ServiciosEmpleado(models.Model):
     def __str__(self):
         return "{} {}".format(self.usuario,self.servicicios)
 
-        
 class ServiciosUsuarios(models.Model):
     servicicios = models.ForeignKey(Servicios, on_delete=models.CASCADE)
     prioridad = models.ForeignKey(Prioridad, on_delete=models.CASCADE)
@@ -49,3 +51,17 @@ class ServiciosUsuarios(models.Model):
 
     def __str__(self):
         return "{} {} {}".format(self.pk,self.servicicios,self.usuario)
+
+class TurnosEmpleados(models.Model):
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    servicio = models.ForeignKey(ServiciosUsuarios, on_delete=models.CASCADE)
+    proceso = models.BooleanField(default=True)
+    fecha_creacion = models.DateTimeField(auto_now=True)
+
+
+    class Meta:
+        verbose_name_plural = "Turnos de los empleados"
+        verbose_name = "Turno del empleado"
+
+    def __str__(self):
+        return "{} {}".format(self.usuario,self.servicio)
