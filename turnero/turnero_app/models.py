@@ -28,6 +28,8 @@ class ServiciosUsuarios(models.Model):
     prioridad = models.ForeignKey(Prioridad, on_delete=models.CASCADE)
     prioridad = models.ForeignKey(User, on_delete=models.CASCADE)
     finalizo = models.BooleanField(default=False)
+    fecha_creacion = models.DateTimeField(auto_now=True)
+    fecha_finalización = models.DateTimeField(auto_now=True)
 
     class Meta:
         verbose_name_plural = "Servicios de usuarios"
