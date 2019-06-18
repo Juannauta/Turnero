@@ -11,7 +11,7 @@ class Prioridad(models.Model):
         verbose_name = "Prioridad"
 
     def __str__(self):
-        return "{} {}".format(self.nombre, self.numbero)
+        return "{} {}".format(self.nombre, self.numero)
 
 class Servicios(models.Model):
     nombre = models.CharField(max_length=200)
@@ -26,7 +26,7 @@ class Servicios(models.Model):
 class ServiciosUsuarios(models.Model):
     servicicios = models.ForeignKey(Servicios, on_delete=models.CASCADE)
     prioridad = models.ForeignKey(Prioridad, on_delete=models.CASCADE)
-    prioridad = models.ForeignKey(User, on_delete=models.CASCADE)
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     finalizo = models.BooleanField(default=False)
     fecha_creacion = models.DateTimeField(auto_now=True)
     fecha_finalización = models.DateTimeField(auto_now=True)

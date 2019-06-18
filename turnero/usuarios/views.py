@@ -2,11 +2,46 @@
 from django.conf import settings
 from django.contrib.auth import logout
 from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
 from django.http import HttpResponseRedirect
-from django.views.generic import View, TemplateView
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import (
+        View, TemplateView, 
+        UpdateView, CreateView,
+    )
 
+from turnero.turnero_app.models import ServiciosUsuarios
+from turnero.usuarios.models import User
+
+class IndexView(TemplateView):
+    template_name = "index.html"
+
+class RegisterUser(CreateView):
+    model = ServiciosUsuarios
+    fields = ('servicicios','prioridad','usuario',)
+
+    def post(self, request, *args, **kwargs):
+        try:
+            user = User.objects.get(cedula=self.request.POST.get('cedula',''))
+        except:
+            user = User(
+                first_name=self.request.POST.get('first_name',''),
+                last_name=self.request.POST.get('last_name',''),
+                cedula=self.request.POST.get('cedula',''),
+                username=self.request.POST.get('cedula',''),
+            )
+            user.save()
+        self.object = None
+        form = self.get_form()
+        form.data = form.data.copy()
+        form.data['usuario'] = str(user.pk)
+        if form.is_valid():
+            return self.form_valid(form)                
+        else:
+            return self.form_invalid(form)
+
+    def get_success_url(self):
+        return reverse('registro')
 
 class UserLoginView(LoginView):
 
@@ -23,7 +58,6 @@ class UserLoginView(LoginView):
     def post(self, request, *args, **kwargs):
         form = self.get_form()
         if form.is_valid():
-            print(form.get_user().tipo_usuario)
             if form.get_user().tipo_usuario != "EM":
                 return self.form_invalid(form)
             else:

@@ -6,13 +6,16 @@ from django.views.generic import TemplateView
 from django.views import defaults as default_views
 
 from turnero.usuarios.views import (
-        UserLoginView, ListarInformacionUsuario,
+        UserLoginView, ListarInformacionUsuario, 
+        IndexView, RegisterUser,
     )
 
 urlpatterns = [
     # Django Admin, use {% url 'admin:index' %}
     path(settings.ADMIN_URL, admin.site.urls),
-    path('', UserLoginView.as_view(), name="login"),
+    path('', IndexView.as_view(), name="index"),
+    path('login/', UserLoginView.as_view(), name="login"),
+    path('registro/', RegisterUser.as_view(), name="registro"),
     path('info/', ListarInformacionUsuario.as_view(), name="info"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
