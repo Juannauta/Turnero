@@ -36,8 +36,7 @@ subscriberClient.on('message', function(channel, message) {
     switch(channel)
     {
         case "nuevo_turno":
-            console.log("recargue");
-            io.sockets.emit('nuevo_turno', {"recargar":true});
+            io.sockets.emit('nuevo_turno', message);
         break;
     }
 });

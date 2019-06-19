@@ -51,8 +51,11 @@ ocupado en el turno {{turno.0.pk}}
   $(function () {
     var socket = io('http://localhost:3000');
     socket.on('nuevo_turno',function(data){
-        alert(data);
-        //location.reload();
+        {% for i in request.user.servicios_empleados.all %}
+            if (data.recargar == "{{i.servicicios.pk}}"){
+                location.reload();
+            }
+        {% endfor %}
     });
   });
 </script>

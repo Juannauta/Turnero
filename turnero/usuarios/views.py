@@ -103,15 +103,18 @@ class ListarInformacionUsuario(LoginRequiredMixin,UpdateView):
     fields = ('first_name','last_name','cedula',)
 
     def get_queryset(self):
-        self.pk = self.request.user.pk
-        if self.request.user.estado == 'DI':
-            return self.request.user
-        else:
-            if self.request.user.get_turno() == None:
-                return HttpResponseRedirect(reverse('info'))
-            self.pk = self.request.user.get_turno()[0].servicio.usuario.pk
-            return self.request.user.get_turno()[0].servicio.usuario
-
+        try:
+            self.pk = self.request.user.pk
+            if self.request.user.estado == 'DI':
+                return self.request.user
+            else:
+                if self.request.user.get_turno() == None:
+                    return HttpResponseRedirect(reverse('info'))
+                self.pk = self.request.user.get_turno()[0].servicio.usuario.pk
+                return self.request.user.get_turno()[0].servicio.usuario
+        except:
+            return HttpResponseRedirect(reverse('info'))
+        
     def get_object(self, queryset=None):
         return self.get_queryset()
 

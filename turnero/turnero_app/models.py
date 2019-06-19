@@ -45,11 +45,11 @@ class ServiciosUsuarios(models.Model):
 
 @receiver(post_save, sender=ServiciosUsuarios)
 def create_auth_token(sender, instance=None, created=False, **kwargs):
-    task_notification.delay(instance.servicios.pk)
+    task_notification.delay(instance.servicicios.pk)
 
 class ServiciosEmpleado(models.Model):
     servicicios = models.ForeignKey(Servicios, on_delete=models.CASCADE)
-    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE,related_name='servicios_empleados')
     fecha_creacion = models.DateTimeField(auto_now=True)
 
     class Meta:

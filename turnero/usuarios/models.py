@@ -26,4 +26,4 @@ class User(AbstractUser):
             self.estado = 'DI'
             self.save()
         else:
-            return self.usuario_turnos.all().filter(proceso=True)
+            return self.usuario_turnos.all().filter(proceso=True).order_by('-pk')
