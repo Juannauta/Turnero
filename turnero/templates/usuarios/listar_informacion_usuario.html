@@ -3,9 +3,8 @@ disponible
 
 <form method="POST"  action="{% url  'aceptar_servicio' %}">
     {% csrf_token %}
-    <input type="hidden" name="usuario" value="{{turno.0.usuario.pk}}">
     <input type="hidden" name="turno" value="{{turno.0.pk}}">
-    <button>Aceptar turno</button>
+    <button>Aceptar turno {{turno.0.pk}}</button>
 </form>
 {% else %}
 ocupado

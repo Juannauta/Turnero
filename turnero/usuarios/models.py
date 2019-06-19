@@ -22,4 +22,8 @@ class User(AbstractUser):
     estado = models.CharField(max_length=2,choices=ESTADO,default=DISPONIBLE)
 
     def get_turno(self):
-        return self.usuario_turnos.all().filter(proceso=True)
+        if len(self.usuario_turnos.all().filter(proceso=True)) == 0:
+            self.estado = 'DI'
+            self.save()
+        else:
+            return self.usuario_turnos.all().filter(proceso=True)

@@ -22,17 +22,12 @@ class AcceptarServicio(LoginRequiredMixin,View):
 
     def post(self, request, *args, **kwargs):
         try:
-            usuario = User.objects.get(pk=request.POST.get('usuario',''))
-        except:
-            return HttpResponseRedirect(reverse('info'))
-
-        try:
             turno = ServiciosUsuarios.objects.get(pk=request.POST.get('turno',''))
         except:
             return HttpResponseRedirect(reverse('info'))
 
         turnoEmpleado = TurnosEmpleados(
-            usuario=usuario,
+            usuario=request.user,
             servicio=turno,
         )
         turnoEmpleado.save()
@@ -112,6 +107,8 @@ class ListarInformacionUsuario(LoginRequiredMixin,UpdateView):
             self.pk = self.request.user.pk
             return self.request.user
         else:
+            if self.request.user.get_turno() == None:
+                return HttpResponseRedirect(reverse('info'))
             self.pk = self.request.user.get_turno()[0].usuario.pk
             return self.request.user.get_turno()[0].usuario
 
