@@ -4,16 +4,14 @@ RUN apk add g++ make python
 
 WORKDIR /usr/app
 
-
-ADD package.json package.json
+COPY node .
 RUN npm install nodemon -g &&\
 	npm install --quiet && \
 	npm audit fix --force && \
 	npm update
 
-COPY . .
 
 
 EXPOSE 3000
 
-CMD npm start
+CMD ls && pwd && npm start

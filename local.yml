@@ -36,12 +36,17 @@ services:
     image: redis:5.0
 
   node:
-    image: node
+    build:
+      context: .
+      dockerfile: ./node/Dockerfile
+    image: node    
     env_file:
       - ./.envs/.local/.django
     depends_on:
       - redis
       - postgres
+    ports:
+      - "3000:3000"
 
   celeryworker:
     <<: *django

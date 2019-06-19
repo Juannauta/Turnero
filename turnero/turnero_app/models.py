@@ -1,6 +1,9 @@
 from django.db import models
-
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from turnero.usuarios.models import User
+
+from .task import task_notification
 
 class Prioridad(models.Model):
     nombre = models.CharField(max_length=200)
@@ -39,6 +42,10 @@ class ServiciosUsuarios(models.Model):
 
     def __str__(self):
         return "{} {} {}".format(self.pk,self.servicicios,self.usuario)
+
+@receiver(post_save, sender=ServiciosUsuarios)
+def create_auth_token(sender, instance=None, created=False, **kwargs):
+    task_notification.delay(instance.servicios.pk)
 
 class ServiciosEmpleado(models.Model):
     servicicios = models.ForeignKey(Servicios, on_delete=models.CASCADE)
