@@ -133,11 +133,11 @@ class TerminarTurno(LoginRequiredMixin,UpdateView):
     model = TurnosEmpleados
     fields = ('proceso',)
 
-    def get_object(self, queryset=None):
-        obj = super().get_object(queryset=queryset)
-        obj.proceso = False
-        print(obj.pk)
-        obj.save()
-
     def get_success_url(self):
         return reverse('info')
+
+    def form_valid(self, form):
+        self.object = form.save()
+        self.object.servicio.finalizo = True
+        self.object.servicio.save()
+        return super().form_valid(form)

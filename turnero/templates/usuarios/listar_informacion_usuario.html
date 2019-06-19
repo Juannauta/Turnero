@@ -1,11 +1,15 @@
 {% if request.user.estado == 'DI' %}
-disponible
+disponible <br>
+    {% if turno|length != 0 %}
+        <form method="POST"  action="{% url  'aceptar_servicio' %}">
+            {% csrf_token %}
+            <input type="hidden" name="turno" value="{{turno.0.pk}}">
+            <button>Aceptar turno {{turno.0.pk}}</button>
+        </form>
+    {% else %}
+        Sin turnos
+    {% endif %}
 
-<form method="POST"  action="{% url  'aceptar_servicio' %}">
-    {% csrf_token %}
-    <input type="hidden" name="turno" value="{{turno.0.pk}}">
-    <button>Aceptar turno {{turno.0.pk}}</button>
-</form>
 {% else %}
 ocupado en el turno {{turno.0.pk}}
 <br>
@@ -33,9 +37,9 @@ ocupado en el turno {{turno.0.pk}}
     <button>Enviar</button>
 </form>
 
-<form action="{% url 'finalizar' turno.0.pk %}" method="POST">
-    {% csrf_token %}
-    <input type="hidden" name="proceso" value="0">
+<form action="{% url 'finalizar' request.user.get_turno.0.pk %}" method="POST">
+    {% csrf_token %} 
+    <input type="checkbox" name="proceso" value="true"  style="display:none;">
     <button>Terminar turno</button>
 </form>
 {% endif %}
