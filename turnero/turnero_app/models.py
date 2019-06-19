@@ -25,18 +25,6 @@ class Servicios(models.Model):
     def __str__(self):
         return "{}".format(self.nombre)
 
-class ServiciosEmpleado(models.Model):
-    servicicios = models.ForeignKey(Servicios, on_delete=models.CASCADE)
-    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
-    fecha_creacion = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        verbose_name_plural = "Servicios de los empleados"
-        verbose_name = "Servicio de empleado"
-
-    def __str__(self):
-        return "{} {}".format(self.usuario,self.servicicios)
-
 class ServiciosUsuarios(models.Model):
     servicicios = models.ForeignKey(Servicios, on_delete=models.CASCADE)
     prioridad = models.ForeignKey(Prioridad, on_delete=models.CASCADE)
@@ -51,6 +39,19 @@ class ServiciosUsuarios(models.Model):
 
     def __str__(self):
         return "{} {} {}".format(self.pk,self.servicicios,self.usuario)
+
+class ServiciosEmpleado(models.Model):
+    servicicios = models.ForeignKey(Servicios, on_delete=models.CASCADE)
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    fecha_creacion = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name_plural = "Servicios de los empleados"
+        verbose_name = "Servicio de empleado"
+
+    def __str__(self):
+        return "{} {}".format(self.usuario,self.servicicios)
+
 
 class TurnosEmpleados(models.Model):
     usuario = models.ForeignKey(User, on_delete=models.CASCADE,related_name='usuario_turnos')
