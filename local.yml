@@ -35,6 +35,14 @@ services:
   redis:
     image: redis:5.0
 
+  node:
+    image: node
+    env_file:
+      - ./.envs/.local/.django
+    depends_on:
+      - redis
+      - postgres
+
   celeryworker:
     <<: *django
     image: turnero_local_celeryworker
