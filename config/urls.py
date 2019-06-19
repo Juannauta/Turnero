@@ -9,6 +9,7 @@ from turnero.usuarios.views import (
         UserLoginView, ListarInformacionUsuario, 
         IndexView, RegisterUser,
         ListServices, AcceptarServicio,
+        TerminarTurno,
     )
 
 urlpatterns = [
@@ -18,6 +19,7 @@ urlpatterns = [
     path('login/', UserLoginView.as_view(), name="login"),
     path('aceptar_servicio/', AcceptarServicio.as_view(), name="aceptar_servicio"),
     path('registro/', RegisterUser.as_view(), name="registro"),
+    path('finalizar_servicio/<int:pk>/', TerminarTurno.as_view(), name="finalizar"),
     path('listar/', ListServices.as_view(), name="listar"),
     path('info/', ListarInformacionUsuario.as_view(), name="info"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

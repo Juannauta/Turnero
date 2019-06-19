@@ -127,3 +127,17 @@ class ListarInformacionUsuario(LoginRequiredMixin,UpdateView):
             'turno':servicios,
         })
         return context
+
+class TerminarTurno(LoginRequiredMixin,UpdateView):
+    template_name = "usuarios/listar_informacion_usuario.html"
+    model = TurnosEmpleados
+    fields = ('proceso',)
+
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset=queryset)
+        obj.proceso = False
+        print(obj.pk)
+        obj.save()
+
+    def get_success_url(self):
+        return reverse('info')

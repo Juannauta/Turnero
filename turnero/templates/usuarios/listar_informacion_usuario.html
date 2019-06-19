@@ -7,7 +7,7 @@ disponible
     <button>Aceptar turno {{turno.0.pk}}</button>
 </form>
 {% else %}
-ocupado
+ocupado en el turno {{turno.0.pk}}
 <br>
 {% if form.errors %}
     {% for field in form %}
@@ -31,5 +31,11 @@ ocupado
 <p><label for="id_cedula">Cedula:</label> <input type="text" name="cedula" maxlength="30" id="id_cedula" value="{{turno.0.usuario.cedula}}"></p>
     <br>
     <button>Enviar</button>
+</form>
+
+<form action="{% url 'finalizar' turno.0.pk %}" method="POST">
+    {% csrf_token %}
+    <input type="hidden" name="proceso" value="0">
+    <button>Terminar turno</button>
 </form>
 {% endif %}
