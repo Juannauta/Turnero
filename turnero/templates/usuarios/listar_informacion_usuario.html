@@ -11,7 +11,7 @@ disponible <br>
     {% endif %}
 
 {% else %}
-ocupado en el turno {{turno.0.pk}}
+ocupado en el turno {{request.user.get_selected_turno.servicio.pk}}
 <br>
 {% if form.errors %}
     {% for field in form %}
@@ -30,14 +30,14 @@ ocupado en el turno {{turno.0.pk}}
 <form action="." method="POST">
         {% csrf_token %}
     
-<p><label for="id_first_name">Nombre:</label> <input type="text" name="first_name" maxlength="30" id="id_first_name" value="{{turno.0.usuario.first_name}}"></p>
-<p><label for="id_last_name">Apellidos:</label> <input type="text" name="last_name" maxlength="150" id="id_last_name" value="{{turno.0.usuario.last_name}}"></p>
-<p><label for="id_cedula">Cedula:</label> <input type="text" name="cedula" maxlength="30" id="id_cedula" value="{{turno.0.usuario.cedula}}"></p>
+<p><label for="id_first_name">Nombre:</label> <input type="text" name="first_name" maxlength="30" id="id_first_name" value="{{request.user.get_selected_turno.servicio.usuario.first_name}}"></p>
+<p><label for="id_last_name">Apellidos:</label> <input type="text" name="last_name" maxlength="150" id="id_last_name" value="{{request.user.get_selected_turno.servicio.usuario.last_name}}"></p>
+<p><label for="id_cedula">Cedula:</label> <input type="text" name="cedula" maxlength="30" id="id_cedula" value="{{request.user.get_selected_turno.servicio.usuario.cedula}}"></p>
     <br>
     <button>Enviar</button>
 </form>
 
-<form action="{% url 'finalizar' request.user.get_turno.0.pk %}" method="POST">
+<form action="{% url 'finalizar' request.user.get_selected_turno.pk %}" method="POST">
     {% csrf_token %} 
     <input type="checkbox" name="proceso" value="true"  style="display:none;">
     <button>Terminar turno</button>
@@ -48,12 +48,18 @@ ocupado en el turno {{turno.0.pk}}
 <script src="http://localhost:3000/socket.io/socket.io.js"></script>
 <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
 <script>
+    var send = false;
   $(function () {
+      $("button").click(function(){
+        send = true;
+      });
     var socket = io('http://localhost:3000');
     socket.on('nuevo_turno',function(data){
         {% for i in request.user.servicios_empleados.all %}
             if (data.recargar == "{{i.servicicios.pk}}"){
-                location.reload();
+                if (send == false){
+                    location.reload();
+                }
             }
         {% endfor %}
     });

@@ -35,6 +35,7 @@ class ServiciosUsuarios(models.Model):
     finalizo = models.BooleanField(default=False)
     fecha_creacion = models.DateTimeField(auto_now=True)
     fecha_finalización = models.DateTimeField(auto_now=True)
+    inicio = models.BooleanField(default=True)
 
     class Meta:
         verbose_name_plural = "Turnos de usuarios"

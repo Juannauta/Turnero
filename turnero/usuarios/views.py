@@ -4,7 +4,7 @@ from django.contrib.auth import logout
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.views.generic import (
         View, TemplateView, 
         UpdateView, CreateView,
@@ -31,6 +31,8 @@ class AcceptarServicio(LoginRequiredMixin,View):
             servicio=turno,
         )
         turnoEmpleado.save()
+        turno.inicio = False
+        turno.save()
         request.user.estado = 'OC'
         request.user.save()
         return HttpResponseRedirect(reverse('info'))
@@ -103,17 +105,15 @@ class ListarInformacionUsuario(LoginRequiredMixin,UpdateView):
     fields = ('first_name','last_name','cedula',)
 
     def get_queryset(self):
-        try:
-            self.pk = self.request.user.pk
-            if self.request.user.estado == 'DI':
-                return self.request.user
-            else:
-                if self.request.user.get_turno() == None:
-                    return HttpResponseRedirect(reverse('info'))
+        self.pk = self.request.user.pk
+        if self.request.user.estado == 'DI':
+            return self.request.user
+        else:
+            if self.request.user.get_turno() != None:
                 self.pk = self.request.user.get_turno()[0].servicio.usuario.pk
                 return self.request.user.get_turno()[0].servicio.usuario
-        except:
-            return HttpResponseRedirect(reverse('info'))
+            else: 
+                return self.request.user
         
     def get_object(self, queryset=None):
         return self.get_queryset()
@@ -122,8 +122,11 @@ class ListarInformacionUsuario(LoginRequiredMixin,UpdateView):
         return reverse('info')
 
     def get_context_data(self, **kwargs):
+        """if self.request.user.get_turno() == None:
+            return HttpResponseRedirect(reverse('info'))"""
+
         self.object = self.get_queryset()
-        servicios = ServiciosUsuarios.objects.filter(finalizo=False).order_by('prioridad__numero')
+        servicios = ServiciosUsuarios.objects.filter(finalizo=False,inicio=True).order_by('prioridad__numero')
         
         context = super().get_context_data(**kwargs)
         context.update({

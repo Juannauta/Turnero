@@ -27,3 +27,6 @@ class User(AbstractUser):
             self.save()
         else:
             return self.usuario_turnos.all().filter(proceso=True).order_by('-pk')
+    
+    def get_selected_turno(self):
+        return self.usuario_turnos.all().filter(servicio__inicio=False,servicio__finalizo=False)[0]
