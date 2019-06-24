@@ -3,6 +3,7 @@ from django.conf import settings
 from django.contrib.auth import logout
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
 from django.urls import reverse
 from django.http import HttpResponseRedirect, HttpResponse
 from django.views.generic import (
@@ -65,6 +66,7 @@ class RegisterUser(CreateView):
         form.data = form.data.copy()
         form.data['usuario'] = str(user.pk)
         if form.is_valid():
+            messages.add_message(request, messages.INFO, 'Registro hecho')
             return self.form_valid(form)                
         else:
             return self.form_invalid(form)
